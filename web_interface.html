@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Champions League Draw Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 30px 40px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .results {
+            padding: 40px;
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .team-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid;
+        }
+
+        .pot-1 { border-color: #ffd700; }
+        .pot-2 { border-color: #c0c0c0; }
+        .pot-3 { border-color: #cd7f32; }
+        .pot-4 { border-color: #4a90e2; }
+
+        .pot-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .pot-badge-1 { background: linear-gradient(135deg, #ffd700, #ffed4e); }
+        .pot-badge-2 { background: linear-gradient(135deg, #c0c0c0, #e8e8e8); color: #333; }
+        .pot-badge-3 { background: linear-gradient(135deg, #cd7f32, #e8a87c); }
+        .pot-badge-4 { background: linear-gradient(135deg, #4a90e2, #5da3f5); }
+
+        .team-info h3 {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .team-info .country {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .matches-section {
+            margin-top: 15px;
+        }
+
+        .matches-section h4 {
+            color: #34495e;
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
+
+        .match-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .match-item {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .match-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .home-match { border-left-color: #28a745; }
+        .away-match { border-left-color: #dc3545; }
+
+        .match-opponent {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .match-country {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            font-size: 1.2em;
+            color: #7f8c8d;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-message {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>UEFA CHAMPIONS LEAGUE</h1>
+            <p>Draw Simulator - 2024-2025 Format</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="performDraw()">Perform Draw</button>
+            <button class="btn btn-secondary" onclick="exportResults()">Export Results</button>
+        </div>
+
+        <div class="results" id="results">
+            <div class="loading">
+                <p>Click "Perform Draw" to start</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const teams = [
+            {name: "Real Madrid", country: "ESP", pot: 1},
+            {name: "Manchester City", country: "ENG", pot: 1},
+            {name: "Bayern Munich", country: "GER", pot: 1},
+            {name: "PSG", country: "FRA", pot: 1},
+            {name: "Liverpool", country: "ENG", pot: 1},
+            {name: "Inter Milan", country: "ITA", pot: 1},
+            {name: "Borussia Dortmund", country: "GER", pot: 1},
+            {name: "RB Leipzig", country: "GER", pot: 1},
+            {name: "Barcelona", country: "ESP", pot: 1},
+            
+            {name: "Bayer Leverkusen", country: "GER", pot: 2},
+            {name: "Atletico Madrid", country: "ESP", pot: 2},
+            {name: "Atalanta", country: "ITA", pot: 2},
+            {name: "Juventus", country: "ITA", pot: 2},
+            {name: "Benfica", country: "POR", pot: 2},
+            {name: "Arsenal", country: "ENG", pot: 2},
+            {name: "Club Brugge", country: "BEL", pot: 2},
+            {name: "Shakhtar Donetsk", country: "UKR", pot: 2},
+            {name: "AC Milan", country: "ITA", pot: 2},
+            
+            {name: "Feyenoord", country: "NED", pot: 3},
+            {name: "Sporting CP", country: "POR", pot: 3},
+            {name: "PSV Eindhoven", country: "NED", pot: 3},
+            {name: "Dinamo Zagreb", country: "CRO", pot: 3},
+            {name: "RB Salzburg", country: "AUT", pot: 3},
+            {name: "Lille", country: "FRA", pot: 3},
+            {name: "Red Star Belgrade", country: "SRB", pot: 3},
+            {name: "Young Boys", country: "SUI", pot: 3},
+            {name: "Celtic", country: "SCO", pot: 3},
+            
+            {name: "Slovan Bratislava", country: "SVK", pot: 4},
+            {name: "Monaco", country: "FRA", pot: 4},
+            {name: "Sparta Prague", country: "CZE", pot: 4},
+            {name: "Aston Villa", country: "ENG", pot: 4},
+            {name: "Bologna", country: "ITA", pot: 4},
+            {name: "Girona", country: "ESP", pot: 4},
+            {name: "Stuttgart", country: "GER", pot: 4},
+            {name: "Sturm Graz", country: "AUT", pot: 4},
+            {name: "Brest", country: "FRA", pot: 4}
+        ];
+
+        let currentDraw = null;
+
+        class ChampionsLeagueDraw {
+            constructor(teams) {
+                this.teams = teams;
+                this.fixtures = {};
+                this.opponentsByPot = {};
+                this.homeAwayCount = {};
+                
+                this.reset();
+            }
+
+            reset() {
+                this.fixtures = {};
+                this.opponentsByPot = {};
+                this.homeAwayCount = {};
+
+                this.teams.forEach(team => {
+                    this.fixtures[team.name] = [];
+                    this.opponentsByPot[team.name] = {1: 0, 2: 0, 3: 0, 4: 0};
+                    this.homeAwayCount[team.name] = {home: 0, away: 0};
+                });
+            }
+
+            canPlayAgainst(team1, team2, isHome) {
+                // Teams from same country cannot play
+                if (team1.country === team2.country) {
+                    return false;
+                }
+                
+                // Maximum 2 teams from same country
+                const team1Countries = {};
+                this.fixtures[team1.name].forEach(f => {
+                    team1Countries[f.opponent.country] = (team1Countries[f.opponent.country] || 0) + 1;
+                });
+                if ((team1Countries[team2.country] || 0) >= 2) {
+                    return false;
+                }
+                
+                const team2Countries = {};
+                this.fixtures[team2.name].forEach(f => {
+                    team2Countries[f.opponent.country] = (team2Countries[f.opponent.country] || 0) + 1;
+                });
+                if ((team2Countries[team1.country] || 0) >= 2) {
+                    return false;
+                }
+
+                if (this.fixtures[team1.name].some(f => f.opponent.name === team2.name)) {
+                    return false;
+                }
+
+                if (this.opponentsByPot[team1.name][team2.pot] >= 2) return false;
+                if (this.opponentsByPot[team2.name][team1.pot] >= 2) return false;
+
+                if (isHome && this.homeAwayCount[team1.name].home >= 4) return false;
+                if (!isHome && this.homeAwayCount[team1.name].away >= 4) return false;
+                if (!isHome && this.homeAwayCount[team2.name].home >= 4) return false;
+                if (isHome && this.homeAwayCount[team2.name].away >= 4) return false;
+
+                return true;
+            }
+
+            addMatch(team1, team2, team1Home) {
+                this.fixtures[team1.name].push({opponent: team2, isHome: team1Home});
+                this.opponentsByPot[team1.name][team2.pot]++;
+                if (team1Home) {
+                    this.homeAwayCount[team1.name].home++;
+                } else {
+                    this.homeAwayCount[team1.name].away++;
+                }
+
+                this.fixtures[team2.name].push({opponent: team1, isHome: !team1Home});
+                this.opponentsByPot[team2.name][team1.pot]++;
+                if (team1Home) {
+                    this.homeAwayCount[team2.name].away++;
+                } else {
+                    this.homeAwayCount[team2.name].home++;
+                }
+            }
+
+            performDraw(maxAttempts = 1000) {
+                for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                    this.reset();
+                    
+                    if (this.attemptDraw()) {
+                        console.log(`Draw successful after ${attempt + 1} attempt(s)`);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            attemptDraw() {
+                const shuffled = [...this.teams].sort(() => Math.random() - 0.5);
+
+                for (const team of shuffled) {
+                    while (this.fixtures[team.name].length < 8) {
+                        const possibleOpponents = [];
+
+                        for (let pot = 1; pot <= 4; pot++) {
+                            if (this.opponentsByPot[team.name][pot] < 2) {
+                                const potTeams = this.teams
+                                    .filter(t => t.pot === pot && t.name !== team.name)
+                                    .sort(() => Math.random() - 0.5);
+
+                                for (const opponent of potTeams) {
+                                    if (this.canPlayAgainst(team, opponent, true)) {
+                                        possibleOpponents.push({opponent, isHome: true});
+                                    } else if (this.canPlayAgainst(team, opponent, false)) {
+                                        possibleOpponents.push({opponent, isHome: false});
+                                    }
+                                }
+                            }
+                        }
+
+                        if (possibleOpponents.length === 0) {
+                            return false;
+                        }
+
+                        const choice = possibleOpponents[Math.floor(Math.random() * possibleOpponents.length)];
+                        this.addMatch(team, choice.opponent, choice.isHome);
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        function performDraw() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Performing draw...</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const draw = new ChampionsLeagueDraw(teams);
+                const success = draw.performDraw(1000);
+
+                if (success) {
+                    currentDraw = draw;
+                    displayResults(draw);
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="status-message status-error">
+                            Unable to perform a valid draw. Please try again.
+                        </div>
+                    `;
+                }
+            }, 100);
+        }
+
+        function displayResults(draw) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `
+                <div class="status-message status-success">
+                    Draw completed successfully!
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-value">36</div>
+                        <div class="stat-label">Teams</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">144</div>
+                        <div class="stat-label">Total Matches</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Matches per Team</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4-4</div>
+                        <div class="stat-label">Home / Away</div>
+                    </div>
+                </div>
+                
+                <div class="teams-grid">
+            `;
+
+            const sortedTeams = [...teams].sort((a, b) => {
+                if (a.pot !== b.pot) return a.pot - b.pot;
+                return a.name.localeCompare(b.name);
+            });
+
+            sortedTeams.forEach(team => {
+                const fixtures = draw.fixtures[team.name];
+                const homeMatches = fixtures.filter(f => f.isHome);
+                const awayMatches = fixtures.filter(f => !f.isHome);
+
+                html += `
+                    <div class="team-card pot-${team.pot}">
+                        <div class="team-header">
+                            <div class="pot-badge pot-badge-${team.pot}">${team.pot}</div>
+                            <div class="team-info">
+                                <h3>${team.name}</h3>
+                                <div class="country">${team.country}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="matches-section">
+                            <h4>HOME MATCHES (${homeMatches.length})</h4>
+                            <div class="match-list">
+                                ${homeMatches.map(m => `
+                                    <div class="match-item home-match">
+                                        <span class="match-opponent">${m.opponent.name}</span>
+                                        <span class="match-country">${m.opponent.country}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="matches-section">
+                            <h4>AWAY MATCHES (${awayMatches.length})</h4>
+                            <div class="match-list">
+                                ${awayMatches.map(m => `
+                                    <div class="match-item away-match">
+                                        <span class="match-opponent">${m.opponent.name}</span>
+                                        <span class="match-country">${m.opponent.country}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+
+        function exportResults() {
+            if (!currentDraw) {
+                alert('Please perform a draw first!');
+                return;
+            }
+
+            let text = 'CHAMPIONS LEAGUE DRAW RESULTS\n';
+            text += '='.repeat(80) + '\n\n';
+
+            const sortedTeams = [...teams].sort((a, b) => {
+                if (a.pot !== b.pot) return a.pot - b.pot;
+                return a.name.localeCompare(b.name);
+            });
+
+            sortedTeams.forEach(team => {
+                text += `${team.name} (${team.country}) - Pot ${team.pot}\n`;
+                text += '-'.repeat(60) + '\n';
+
+                const fixtures = currentDraw.fixtures[team.name];
+                const homeMatches = fixtures.filter(f => f.isHome);
+                const awayMatches = fixtures.filter(f => !f.isHome);
+
+                text += `  HOME MATCHES (${homeMatches.length}):\n`;
+                homeMatches.forEach(m => {
+                    text += `    ${team.name} vs ${m.opponent.name} (${m.opponent.country})\n`;
+                });
+
+                text += `\n  AWAY MATCHES (${awayMatches.length}):\n`;
+                awayMatches.forEach(m => {
+                    text += `    ${m.opponent.name} vs ${team.name} (${m.opponent.country})\n`;
+                });
+
+                text += '\n';
+            });
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'champions_league_draw.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

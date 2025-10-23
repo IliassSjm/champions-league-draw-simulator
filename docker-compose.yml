@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  ucl-draw:
+    build: .
+    image: champions-league-draw:latest
+    container_name: ucl-draw-simulator
+    volumes:
+      - ./output:/app/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python3 champions_league_draw.py
+    restart: unless-stopped
+
+  ucl-demo:
+    build: .
+    image: champions-league-draw:latest
+    container_name: ucl-draw-demo
+    command: python3 demo.py
+    profiles:
+      - demo
+
+  ucl-test:
+    build: .
+    image: champions-league-draw:latest
+    container_name: ucl-draw-test
+    command: python3 test_draw.py
+    profiles:
+      - test
+

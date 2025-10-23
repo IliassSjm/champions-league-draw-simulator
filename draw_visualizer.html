@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Champions League Draw Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            background: white;
+            color: #1e3c72;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,255,255,0.3);
+        }
+
+        .view-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .view-btn {
+            padding: 10px 30px;
+            margin: 0 5px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: white;
+            color: #1e3c72;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Grid View */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .team-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid;
+            margin-bottom: 15px;
+        }
+
+        .pot-1 { border-color: #FFD700; }
+        .pot-2 { border-color: #C0C0C0; }
+        .pot-3 { border-color: #CD7F32; }
+        .pot-4 { border-color: #4A90E2; }
+
+        .pot-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.3em;
+        }
+
+        .pot-badge-1 { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .pot-badge-2 { background: linear-gradient(135deg, #C0C0C0, #808080); }
+        .pot-badge-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); }
+        .pot-badge-4 { background: linear-gradient(135deg, #4A90E2, #1E3A5F); }
+
+        .team-name {
+            flex: 1;
+        }
+
+        .team-name h3 {
+            font-size: 1.3em;
+            color: #2c3e50;
+        }
+
+        .team-name .country {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .matches {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .match-group h4 {
+            font-size: 0.9em;
+            color: #34495e;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .match-item {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            border-left: 3px solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .match-item.home { border-left-color: #28a745; }
+        .match-item.away { border-left-color: #dc3545; }
+
+        .match-country {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        /* Table View */
+        .table-view {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .table-view.active {
+            display: block;
+        }
+
+        .pot-section {
+            margin-bottom: 40px;
+        }
+
+        .pot-section h2 {
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .pot-section.pot-1 h2 { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .pot-section.pot-2 h2 { background: linear-gradient(135deg, #C0C0C0, #808080); }
+        .pot-section.pot-3 h2 { background: linear-gradient(135deg, #CD7F32, #8B4513); }
+        .pot-section.pot-4 h2 { background: linear-gradient(135deg, #4A90E2, #1E3A5F); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .opponent-list {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status {
+            text-align: center;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Statistics */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .teams-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .matches {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>UEFA Champions League Draw</h1>
+        <p>2024-2025 Season - Interactive Visualizer</p>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="performDraw()">Generate New Draw</button>
+        <button class="btn" onclick="exportResults()">Export Results</button>
+    </div>
+
+    <div id="results">
+        <div class="loading">
+            <p>Click "Generate New Draw" to start</p>
+        </div>
+    </div>
+
+    <script>
+        const teams = [
+            {name: "Real Madrid", country: "ESP", pot: 1},
+            {name: "Manchester City", country: "ENG", pot: 1},
+            {name: "Bayern Munich", country: "GER", pot: 1},
+            {name: "PSG", country: "FRA", pot: 1},
+            {name: "Liverpool", country: "ENG", pot: 1},
+            {name: "Inter Milan", country: "ITA", pot: 1},
+            {name: "Borussia Dortmund", country: "GER", pot: 1},
+            {name: "RB Leipzig", country: "GER", pot: 1},
+            {name: "Barcelona", country: "ESP", pot: 1},
+            
+            {name: "Bayer Leverkusen", country: "GER", pot: 2},
+            {name: "Atletico Madrid", country: "ESP", pot: 2},
+            {name: "Atalanta", country: "ITA", pot: 2},
+            {name: "Juventus", country: "ITA", pot: 2},
+            {name: "Benfica", country: "POR", pot: 2},
+            {name: "Arsenal", country: "ENG", pot: 2},
+            {name: "Club Brugge", country: "BEL", pot: 2},
+            {name: "Shakhtar Donetsk", country: "UKR", pot: 2},
+            {name: "AC Milan", country: "ITA", pot: 2},
+            
+            {name: "Feyenoord", country: "NED", pot: 3},
+            {name: "Sporting CP", country: "POR", pot: 3},
+            {name: "PSV Eindhoven", country: "NED", pot: 3},
+            {name: "Dinamo Zagreb", country: "CRO", pot: 3},
+            {name: "RB Salzburg", country: "AUT", pot: 3},
+            {name: "Lille", country: "FRA", pot: 3},
+            {name: "Red Star Belgrade", country: "SRB", pot: 3},
+            {name: "Young Boys", country: "SUI", pot: 3},
+            {name: "Celtic", country: "SCO", pot: 3},
+            
+            {name: "Slovan Bratislava", country: "SVK", pot: 4},
+            {name: "Monaco", country: "FRA", pot: 4},
+            {name: "Sparta Prague", country: "CZE", pot: 4},
+            {name: "Aston Villa", country: "ENG", pot: 4},
+            {name: "Bologna", country: "ITA", pot: 4},
+            {name: "Girona", country: "ESP", pot: 4},
+            {name: "Stuttgart", country: "GER", pot: 4},
+            {name: "Sturm Graz", country: "AUT", pot: 4},
+            {name: "Brest", country: "FRA", pot: 4}
+        ];
+
+        let currentDraw = null;
+        let currentView = 'grid';
+
+        class ChampionsLeagueDraw {
+            constructor(teams) {
+                this.teams = teams;
+                this.fixtures = {};
+                this.opponentsByPot = {};
+                this.homeAwayCount = {};
+                this.reset();
+            }
+
+            reset() {
+                this.fixtures = {};
+                this.opponentsByPot = {};
+                this.homeAwayCount = {};
+
+                this.teams.forEach(team => {
+                    this.fixtures[team.name] = [];
+                    this.opponentsByPot[team.name] = {1: 0, 2: 0, 3: 0, 4: 0};
+                    this.homeAwayCount[team.name] = {home: 0, away: 0};
+                });
+            }
+
+            canPlayAgainst(team1, team2, isHome) {
+                if (team1.country === team2.country) {
+                    return false;
+                }
+                
+                const team1Countries = {};
+                this.fixtures[team1.name].forEach(f => {
+                    team1Countries[f.opponent.country] = (team1Countries[f.opponent.country] || 0) + 1;
+                });
+                if ((team1Countries[team2.country] || 0) >= 2) {
+                    return false;
+                }
+                
+                const team2Countries = {};
+                this.fixtures[team2.name].forEach(f => {
+                    team2Countries[f.opponent.country] = (team2Countries[f.opponent.country] || 0) + 1;
+                });
+                if ((team2Countries[team1.country] || 0) >= 2) {
+                    return false;
+                }
+
+                if (this.fixtures[team1.name].some(f => f.opponent.name === team2.name)) {
+                    return false;
+                }
+
+                if (this.opponentsByPot[team1.name][team2.pot] >= 2) return false;
+                if (this.opponentsByPot[team2.name][team1.pot] >= 2) return false;
+
+                if (isHome && this.homeAwayCount[team1.name].home >= 4) return false;
+                if (!isHome && this.homeAwayCount[team1.name].away >= 4) return false;
+                if (!isHome && this.homeAwayCount[team2.name].home >= 4) return false;
+                if (isHome && this.homeAwayCount[team2.name].away >= 4) return false;
+
+                return true;
+            }
+
+            addMatch(team1, team2, team1Home) {
+                this.fixtures[team1.name].push({opponent: team2, isHome: team1Home});
+                this.opponentsByPot[team1.name][team2.pot]++;
+                if (team1Home) {
+                    this.homeAwayCount[team1.name].home++;
+                } else {
+                    this.homeAwayCount[team1.name].away++;
+                }
+
+                this.fixtures[team2.name].push({opponent: team1, isHome: !team1Home});
+                this.opponentsByPot[team2.name][team1.pot]++;
+                if (team1Home) {
+                    this.homeAwayCount[team2.name].away++;
+                } else {
+                    this.homeAwayCount[team2.name].home++;
+                }
+            }
+
+            performDraw(maxAttempts = 5000) {
+                for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                    this.reset();
+                    
+                    if (this.attemptDraw()) {
+                        console.log(`Draw successful after ${attempt + 1} attempt(s)`);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            attemptDraw() {
+                const shuffled = [...this.teams].sort(() => Math.random() - 0.5);
+
+                for (const team of shuffled) {
+                    while (this.fixtures[team.name].length < 8) {
+                        const possibleOpponents = [];
+
+                        for (let pot = 1; pot <= 4; pot++) {
+                            if (this.opponentsByPot[team.name][pot] < 2) {
+                                const potTeams = this.teams
+                                    .filter(t => t.pot === pot && t.name !== team.name)
+                                    .sort(() => Math.random() - 0.5);
+
+                                for (const opponent of potTeams) {
+                                    if (this.canPlayAgainst(team, opponent, true)) {
+                                        possibleOpponents.push({opponent, isHome: true});
+                                    } else if (this.canPlayAgainst(team, opponent, false)) {
+                                        possibleOpponents.push({opponent, isHome: false});
+                                    }
+                                }
+                            }
+                        }
+
+                        if (possibleOpponents.length === 0) {
+                            return false;
+                        }
+
+                        const choice = possibleOpponents[Math.floor(Math.random() * possibleOpponents.length)];
+                        this.addMatch(team, choice.opponent, choice.isHome);
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        function performDraw() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Performing draw... This may take a few seconds</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const draw = new ChampionsLeagueDraw(teams);
+                const success = draw.performDraw(5000);
+
+                if (success) {
+                    currentDraw = draw;
+                    displayResults(draw);
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="status error">
+                            Unable to complete draw. Please try again.
+                        </div>
+                    `;
+                }
+            }, 100);
+        }
+
+        function displayResults(draw) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `
+                <div class="container">
+                    <div class="status success">
+                        Draw completed successfully!
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-value">36</div>
+                            <div class="stat-label">Teams</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">144</div>
+                            <div class="stat-label">Matches</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Per Team</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">4-4</div>
+                            <div class="stat-label">Home/Away</div>
+                        </div>
+                    </div>
+
+                    <div class="view-toggle">
+                        <button class="view-btn active" onclick="switchView('grid')">Grid View</button>
+                        <button class="view-btn" onclick="switchView('table')">Table View</button>
+                    </div>
+
+                    <div id="grid-view" class="teams-grid">
+            `;
+
+            const sortedTeams = [...teams].sort((a, b) => {
+                if (a.pot !== b.pot) return a.pot - b.pot;
+                return a.name.localeCompare(b.name);
+            });
+
+            sortedTeams.forEach(team => {
+                const fixtures = draw.fixtures[team.name];
+                const homeMatches = fixtures.filter(f => f.isHome);
+                const awayMatches = fixtures.filter(f => !f.isHome);
+
+                html += `
+                    <div class="team-card pot-${team.pot}">
+                        <div class="team-header">
+                            <div class="pot-badge pot-badge-${team.pot}">${team.pot}</div>
+                            <div class="team-name">
+                                <h3>${team.name}</h3>
+                                <div class="country">${team.country}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="matches">
+                            <div class="match-group">
+                                <h4>Home (${homeMatches.length})</h4>
+                                ${homeMatches.map(m => `
+                                    <div class="match-item home">
+                                        <span>${m.opponent.name}</span>
+                                        <span class="match-country">${m.opponent.country}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="match-group">
+                                <h4>Away (${awayMatches.length})</h4>
+                                ${awayMatches.map(m => `
+                                    <div class="match-item away">
+                                        <span>${m.opponent.name}</span>
+                                        <span class="match-country">${m.opponent.country}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>'; // Close grid-view
+
+            // Table view
+            html += '<div id="table-view" class="table-view">';
+            
+            for (let pot = 1; pot <= 4; pot++) {
+                const potTeams = sortedTeams.filter(t => t.pot === pot);
+                html += `
+                    <div class="pot-section pot-${pot}">
+                        <h2>Pot ${pot}</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Team</th>
+                                    <th>Country</th>
+                                    <th>Home Opponents</th>
+                                    <th>Away Opponents</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                potTeams.forEach(team => {
+                    const fixtures = draw.fixtures[team.name];
+                    const homeMatches = fixtures.filter(f => f.isHome).map(f => f.opponent.name).join(', ');
+                    const awayMatches = fixtures.filter(f => !f.isHome).map(f => f.opponent.name).join(', ');
+                    
+                    html += `
+                        <tr>
+                            <td><strong>${team.name}</strong></td>
+                            <td>${team.country}</td>
+                            <td class="opponent-list">${homeMatches}</td>
+                            <td class="opponent-list">${awayMatches}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table></div>';
+            }
+            
+            html += '</div></div>'; // Close table-view and container
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function switchView(view) {
+            currentView = view;
+            
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (view === 'grid') {
+                document.getElementById('grid-view').style.display = 'grid';
+                document.getElementById('table-view').classList.remove('active');
+                event.target.classList.add('active');
+            } else {
+                document.getElementById('grid-view').style.display = 'none';
+                document.getElementById('table-view').classList.add('active');
+                event.target.classList.add('active');
+            }
+        }
+
+        function exportResults() {
+            if (!currentDraw) {
+                alert('Please perform a draw first!');
+                return;
+            }
+
+            let text = 'UEFA CHAMPIONS LEAGUE DRAW 2024-2025\n';
+            text += '='.repeat(80) + '\n\n';
+
+            const sortedTeams = [...teams].sort((a, b) => {
+                if (a.pot !== b.pot) return a.pot - b.pot;
+                return a.name.localeCompare(b.name);
+            });
+
+            sortedTeams.forEach(team => {
+                text += `${team.name} (${team.country}) - Pot ${team.pot}\n`;
+                text += '-'.repeat(60) + '\n';
+
+                const fixtures = currentDraw.fixtures[team.name];
+                const homeMatches = fixtures.filter(f => f.isHome);
+                const awayMatches = fixtures.filter(f => !f.isHome);
+
+                text += `  HOME (${homeMatches.length}):\n`;
+                homeMatches.forEach(m => {
+                    text += `    ${team.name} vs ${m.opponent.name} (${m.opponent.country})\n`;
+                });
+
+                text += `\n  AWAY (${awayMatches.length}):\n`;
+                awayMatches.forEach(m => {
+                    text += `    ${m.opponent.name} vs ${team.name} (${m.opponent.country})\n`;
+                });
+
+                text += '\n';
+            });
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ucl_draw_2024_2025.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
+

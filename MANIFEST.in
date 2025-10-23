@@ -1,0 +1,11 @@
+include README.md
+include LICENSE
+include ARCHITECTURE.md
+include CONTRIBUTING.md
+include requirements.txt
+include Dockerfile
+include docker-compose.yml
+include .dockerignore
+recursive-include . *.html
+recursive-include .github *
+
