@@ -414,7 +414,7 @@
                 }
             }
 
-            performDraw(maxAttempts = 1000) {
+            performDraw(maxAttempts = 25000) {
                 for (let attempt = 0; attempt < maxAttempts; attempt++) {
                     this.reset();
                     
@@ -473,7 +473,7 @@
 
             setTimeout(() => {
                 const draw = new ChampionsLeagueDraw(teams);
-                const success = draw.performDraw(1000);
+                const success = draw.performDraw(25000);
 
                 if (success) {
                     currentDraw = draw;
@@ -514,58 +514,64 @@
                         <div class="stat-label">Home / Away</div>
                     </div>
                 </div>
-                
-                <div class="teams-grid">
             `;
 
-            const sortedTeams = [...teams].sort((a, b) => {
-                if (a.pot !== b.pot) return a.pot - b.pot;
-                return a.name.localeCompare(b.name);
-            });
-
-            sortedTeams.forEach(team => {
-                const fixtures = draw.fixtures[team.name];
-                const homeMatches = fixtures.filter(f => f.isHome);
-                const awayMatches = fixtures.filter(f => !f.isHome);
-
+            // Display POT BY POT like real UEFA draw
+            for (let potNum = 1; potNum <= 4; potNum++) {
                 html += `
-                    <div class="team-card pot-${team.pot}">
-                        <div class="team-header">
-                            <div class="pot-badge pot-badge-${team.pot}">${team.pot}</div>
-                            <div class="team-info">
-                                <h3>${team.name}</h3>
-                                <div class="country">${team.country}</div>
-                            </div>
-                        </div>
-                        
-                        <div class="matches-section">
-                            <h4>HOME MATCHES (${homeMatches.length})</h4>
-                            <div class="match-list">
-                                ${homeMatches.map(m => `
-                                    <div class="match-item home-match">
-                                        <span class="match-opponent">${m.opponent.name}</span>
-                                        <span class="match-country">${m.opponent.country}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        
-                        <div class="matches-section">
-                            <h4>AWAY MATCHES (${awayMatches.length})</h4>
-                            <div class="match-list">
-                                ${awayMatches.map(m => `
-                                    <div class="match-item away-match">
-                                        <span class="match-opponent">${m.opponent.name}</span>
-                                        <span class="match-country">${m.opponent.country}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
+                    <div style="margin: 40px 0; padding: 20px; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); border-radius: 15px;">
+                        <h2 style="color: white; text-align: center; margin: 0; font-size: 2em;">POT ${potNum}</h2>
                     </div>
+                    <div class="teams-grid">
                 `;
-            });
 
-            html += '</div>';
+                const potTeams = teams.filter(t => t.pot === potNum).sort((a, b) => a.name.localeCompare(b.name));
+
+                potTeams.forEach(team => {
+                    const fixtures = draw.fixtures[team.name];
+                    const homeMatches = fixtures.filter(f => f.isHome);
+                    const awayMatches = fixtures.filter(f => !f.isHome);
+
+                    html += `
+                        <div class="team-card pot-${team.pot}">
+                            <div class="team-header">
+                                <div class="pot-badge pot-badge-${team.pot}">${team.pot}</div>
+                                <div class="team-info">
+                                    <h3>${team.name}</h3>
+                                    <div class="country">${team.country}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="matches-section">
+                                <h4>HOME MATCHES (${homeMatches.length})</h4>
+                                <div class="match-list">
+                                    ${homeMatches.map(m => `
+                                        <div class="match-item home-match">
+                                            <span class="match-opponent">${m.opponent.name}</span>
+                                            <span class="match-country">${m.opponent.country}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="matches-section">
+                                <h4>AWAY MATCHES (${awayMatches.length})</h4>
+                                <div class="match-list">
+                                    ${awayMatches.map(m => `
+                                        <div class="match-item away-match">
+                                            <span class="match-opponent">${m.opponent.name}</span>
+                                            <span class="match-country">${m.opponent.country}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+            }
+
             resultsDiv.innerHTML = html;
         }
 

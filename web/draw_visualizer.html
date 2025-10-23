@@ -468,7 +468,7 @@
                 }
             }
 
-            performDraw(maxAttempts = 5000) {
+            performDraw(maxAttempts = 25000) {
                 for (let attempt = 0; attempt < maxAttempts; attempt++) {
                     this.reset();
                     
@@ -527,7 +527,7 @@
 
             setTimeout(() => {
                 const draw = new ChampionsLeagueDraw(teams);
-                const success = draw.performDraw(5000);
+                const success = draw.performDraw(25000);
 
                 if (success) {
                     currentDraw = draw;

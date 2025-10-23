@@ -145,7 +145,7 @@ docker-compose --profile test up
 The algorithm is randomized and may take many attempts. This is normal with strict constraints.
 
 ### Tests Skipped
-Some tests may be skipped if random draws fail after 15000 attempts. This is acceptable due to constraint complexity.
+Some tests may be skipped if random draws fail after 25000 attempts. This is acceptable due to constraint complexity.
 
 ### No Executable Permission
 ```bash
@@ -190,7 +190,7 @@ champions-league-draw/
 ## Performance
 
 - **Average Draw Time**: 1-3 seconds
-- **Success Rate**: >95% within 15000 attempts
+- **Success Rate**: >95% within 25000 attempts
 - **Memory Usage**: <50MB
 - **CPU Usage**: Single core sufficient
 

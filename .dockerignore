@@ -33,8 +33,9 @@ LICENSE
 
 # Output files
 *.json
-*.txt
 output/
+*.txt
+!requirements.txt
 
 # Docker
 Dockerfile

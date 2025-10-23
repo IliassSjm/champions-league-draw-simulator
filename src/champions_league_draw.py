@@ -191,6 +191,36 @@ class ChampionsLeagueDraw:
             for opponent, _ in sorted(away_matches, key=lambda x: x[0].name):
                 print(f"    {opponent.name} vs {team.name} ({opponent.country})")
     
+    def display_results_by_pot(self):
+        """Display the draw results pot by pot (like real UEFA ceremony)"""
+        
+        print("\n" + "="*80)
+        print("CHAMPIONS LEAGUE DRAW RESULTS - POT BY POT")
+        print("="*80)
+        
+        for pot_num in [1, 2, 3, 4]:
+            print(f"\n{'='*80}")
+            print(f"POT {pot_num}")
+            print(f"{'='*80}")
+            
+            pot_teams = sorted([t for t in self.teams if t.pot == pot_num], key=lambda t: t.name)
+            
+            for team in pot_teams:
+                print(f"\n{team.name} ({team.country})")
+                print("-" * 60)
+                
+                home_matches = [f for f in self.fixtures[team] if f[1]]
+                away_matches = [f for f in self.fixtures[team] if not f[1]]
+                
+                print(f"  HOME matches ({len(home_matches)}):")
+                for opponent, _ in sorted(home_matches, key=lambda x: x[0].name):
+                    print(f"    {team.name} vs {opponent.name} ({opponent.country})")
+                
+                print(f"\n  AWAY matches ({len(away_matches)}):")
+                for opponent, _ in sorted(away_matches, key=lambda x: x[0].name):
+                    print(f"    {opponent.name} vs {team.name} ({opponent.country})")
+                print()
+    
     def verify_constraints(self) -> bool:
         """Verify all constraints are met"""
         
@@ -303,10 +333,10 @@ def main():
     draw = ChampionsLeagueDraw(teams)
     
     print("Starting draw...")
-    success = draw.perform_draw(max_attempts=15000)
+    success = draw.perform_draw(max_attempts=25000)
     
     if success:
-        draw.display_results()
+        draw.display_results_by_pot()
         
         print("\n" + "="*80)
         print("CONSTRAINT VERIFICATION")

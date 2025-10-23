@@ -1,6 +1,6 @@
 # UEFA Champions League Draw Simulator
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: Clean](https://img.shields.io/badge/code%20style-clean-brightgreen.svg)](https://github.com/psf/black)
 
@@ -87,7 +87,7 @@ if draw.perform_draw(max_attempts=5000):
 ## Installation & Usage
 
 ### Prerequisites
-- Python 3.8 or higher
+- Python 3.10 or higher
 - Modern web browser (for visualizer)
 - No external dependencies required
 
@@ -136,7 +136,7 @@ docker run -p 8000:8000 ucl-draw
 
 ## Technical Stack
 
-- **Language**: Python 3.8+
+- **Language**: Python 3.10+
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
 - **Testing**: unittest (Python standard library)
 - **Architecture**: Object-oriented design with separation of concerns

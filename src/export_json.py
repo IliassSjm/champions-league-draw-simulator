@@ -78,7 +78,7 @@ def main():
     teams = create_sample_teams()
     draw = ChampionsLeagueDraw(teams)
     
-    if draw.perform_draw(max_attempts=15000):
+    if draw.perform_draw(max_attempts=25000):
         export_draw_to_json(draw, "ucl_draw_2024_2025.json")
         
         print("\nVerifying constraints...")

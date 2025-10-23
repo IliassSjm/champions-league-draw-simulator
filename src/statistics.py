@@ -153,7 +153,7 @@ def main():
     teams = create_sample_teams()
     draw = ChampionsLeagueDraw(teams)
     
-    if draw.perform_draw(max_attempts=15000):
+    if draw.perform_draw(max_attempts=25000):
         print("\nAnalyzing statistics...")
         stats = DrawStatistics(draw)
         stats.display_statistics()

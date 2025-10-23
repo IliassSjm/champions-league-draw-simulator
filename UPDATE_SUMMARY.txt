@@ -1,0 +1,35 @@
+SUMMARY OF CHANGES
+==================
+
+1. PYTHON VERSION UPDATE
+   ✅ Changed minimum Python version from 3.8 to 3.10
+   ✅ Updated: README.md, setup.py, CI workflow, requirements.txt, PROJECT_INFO.txt
+
+2. DISPLAY POT BY POT (Like Real UEFA Draw)
+   ✅ Added display_results_by_pot() method to show results pot by pot
+   ✅ Updated main() to use pot-by-pot display
+   ✅ Updated web interfaces to group results by pot with visual headers
+
+3. WEB INTERFACES UPDATED
+   ✅ web_interface.html: Now displays POT 1, POT 2, POT 3, POT 4 with blue headers
+   ✅ web_visualizer.html: Updated for consistency
+   ✅ Both use 25000 max attempts
+
+4. DOCKER FIX
+   ✅ Fixed .dockerignore to not exclude requirements.txt (was blocking CI)
+   ✅ Added !requirements.txt exception
+
+5. MAX ATTEMPTS INCREASED
+   ✅ Updated from 15000 to 25000 attempts everywhere:
+      - src/champions_league_draw.py
+      - src/export_json.py
+      - src/statistics.py
+      - tests/test_draw.py
+      - web/web_interface.html
+      - web/draw_visualizer.html
+      - docs/QUICK_START.md
+      - PROJECT_INFO.txt
+
+READY TO COMMIT AND PUSH
+-------------------------
+All changes are ready to be committed to fix the CI and improve the project!

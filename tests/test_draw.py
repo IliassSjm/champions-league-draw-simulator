@@ -137,9 +137,9 @@ class TestChampionsLeagueDraw(unittest.TestCase):
     
     def test_perform_draw(self):
         """Test that a complete draw can be performed"""
-        success = self.draw.perform_draw(max_attempts=15000)
+        success = self.draw.perform_draw(max_attempts=25000)
         if not success:
-            self.skipTest("Draw failed after 15000 attempts (random variability)")
+            self.skipTest("Draw failed after 25000 attempts (random variability)")
         
         if success:
             for team in self.teams:
@@ -148,7 +148,7 @@ class TestChampionsLeagueDraw(unittest.TestCase):
     
     def test_verify_constraints_after_draw(self):
         """Test that constraints are met after draw"""
-        success = self.draw.perform_draw(max_attempts=15000)
+        success = self.draw.perform_draw(max_attempts=25000)
         
         if success:
             is_valid = self.draw.verify_constraints()
@@ -182,7 +182,7 @@ class TestChampionsLeagueDraw(unittest.TestCase):
     
     def test_no_duplicate_matches(self):
         """Test that there are no duplicate matches"""
-        success = self.draw.perform_draw(max_attempts=15000)
+        success = self.draw.perform_draw(max_attempts=25000)
         
         if success:
             all_matches = set()
@@ -202,9 +202,9 @@ class TestChampionsLeagueDraw(unittest.TestCase):
         """Test that multiple draws work"""
         for i in range(2):
             draw = ChampionsLeagueDraw(self.teams)
-            success = draw.perform_draw(max_attempts=15000)
+            success = draw.perform_draw(max_attempts=25000)
             if not success:
-                self.skipTest(f"Draw {i+1} failed after 15000 attempts (random variability)")
+                self.skipTest(f"Draw {i+1} failed after 25000 attempts (random variability)")
             self.assertTrue(success, f"Draw {i+1} should succeed")
 
 
