@@ -30,7 +30,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 CMD ["python3", "champions_league_draw.py"]
 
 # Labels
-LABEL maintainer="your.email@example.com"
+LABEL maintainer="iliass.sjm@icloud.com"
 LABEL description="UEFA Champions League Draw Simulator"
 LABEL version="1.0.0"
 

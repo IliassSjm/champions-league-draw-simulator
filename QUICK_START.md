@@ -33,8 +33,8 @@ open draw_visualizer.html
 No installation needed! Uses only Python standard library.
 
 ```bash
-# Clone the repository (after you push to GitHub)
-git clone https://github.com/yourusername/champions-league-draw-simulator.git
+# Clone the repository
+git clone https://github.com/iliassSjm/champions-league-draw-simulator.git
 cd champions-league-draw-simulator
 
 # Run immediately
@@ -93,7 +93,6 @@ open web_interface.html
 ### Documentation
 - `README.md` - User documentation with badges
 - `ARCHITECTURE.md` - Technical architecture deep-dive
-- `PORTFOLIO.md` - Portfolio showcase
 - `CONTRIBUTING.md` - Contribution guidelines
 - `GITHUB_SETUP.md` - GitHub publishing guide
 
@@ -179,7 +178,6 @@ champions-league-draw/
 ├── Documentation
 │   ├── README.md
 │   ├── ARCHITECTURE.md
-│   ├── PORTFOLIO.md
 │   ├── CONTRIBUTING.md
 │   └── GITHUB_SETUP.md
 └── DevOps
@@ -206,11 +204,8 @@ champions-league-draw/
 
 MIT License - see LICENSE file
 
-## Contact
-
 ---
 
 **Need Help?** Open an issue on GitHub  
-**Want to Contribute?** See CONTRIBUTING.md  
-**Interview Questions?** See PORTFOLIO.md
+**Want to Contribute?** See CONTRIBUTING.md
 

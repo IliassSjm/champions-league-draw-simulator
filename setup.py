@@ -10,8 +10,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="champions-league-draw",
     version="1.0.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Iliass Sijelmassi",
+    author_email="iliass.sij@icloud.com",
     description="UEFA Champions League Draw Simulator with constraint satisfaction",
     long_description=long_description,
     long_description_content_type="text/markdown",

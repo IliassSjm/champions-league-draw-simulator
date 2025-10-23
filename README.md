@@ -91,7 +91,7 @@ if draw.perform_draw(max_attempts=5000):
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/champions-league-draw.git
+git clone https://github.com/iliassSjm/champions-league-draw.git
 cd champions-league-draw
 
 # Run the main program
@@ -155,18 +155,6 @@ The draw system uses a **randomized constraint satisfaction algorithm**:
 - **Scalability**: Can handle constraint additions
 - **Transparency**: Clear verification of all rules
 
-## Key Learnings
-
-This project demonstrates proficiency in:
-
-- **Algorithm Design**: Implementing CSP with multiple constraints
-- **Software Architecture**: Clean, modular, testable code
-- **Testing**: Comprehensive unit tests with edge cases
-- **Documentation**: Clear README, inline comments, type hints
-- **Web Development**: Responsive UI without frameworks
-- **Problem Solving**: Complex real-world constraint satisfaction
-
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -180,10 +168,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-Project Link: [https://github.com/yourusername/champions-league-draw](https://github.com/yourusername/champions-league-draw)
 
 ## Acknowledgments
 
