@@ -166,14 +166,6 @@ This project demonstrates proficiency in:
 - **Web Development**: Responsive UI without frameworks
 - **Problem Solving**: Complex real-world constraint satisfaction
 
-## Future Enhancements
-
-- [ ] Machine learning to optimize attempt count
-- [ ] Interactive constraint visualization
-- [ ] Historical draw analysis
-- [ ] RESTful API with Flask/FastAPI
-- [ ] Database integration for draw history
-- [ ] Mobile app version
 
 ## Contributing
 
