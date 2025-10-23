@@ -303,7 +303,7 @@ def main():
     draw = ChampionsLeagueDraw(teams)
     
     print("Starting draw...")
-    success = draw.perform_draw(max_attempts=5000)
+    success = draw.perform_draw(max_attempts=15000)
     
     if success:
         draw.display_results()
