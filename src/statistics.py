@@ -4,7 +4,7 @@ Module for generating detailed statistics about the draw
 
 from collections import Counter, defaultdict
 from typing import Dict, List
-from champions_league_draw import ChampionsLeagueDraw, create_sample_teams, Team
+from .champions_league_draw import ChampionsLeagueDraw, create_sample_teams, Team
 
 
 class DrawStatistics:

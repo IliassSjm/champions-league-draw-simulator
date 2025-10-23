@@ -5,36 +5,39 @@ Technical constraint satisfaction algorithm implementation for UEFA Champions Le
 
 QUICK START
 -----------
-python3 champions_league_draw.py    # Run simulator
-python3 test_draw.py                # Run tests
-open draw_visualizer.html           # Web interface
-make help                           # See all commands
+python3 -m src.champions_league_draw    # Run simulator
+python3 -m unittest discover -s tests    # Run tests
+open web/draw_visualizer.html            # Web interface
+make help                                # See all commands
 
 PROJECT STRUCTURE
 -----------------
-Core:
-  - champions_league_draw.py (321 lines) - Main algorithm
-  - statistics.py (253 lines) - Analysis
-  - export_json.py (92 lines) - JSON export
-  - demo.py (156 lines) - Demo script
+src/                                 # Source code
+  ├── __init__.py
+  ├── champions_league_draw.py       # Main algorithm (321 lines)
+  ├── statistics.py                  # Analysis (253 lines)
+  ├── export_json.py                 # JSON export (92 lines)
+  └── demo.py                        # Demo script (156 lines)
 
-Web:
-  - draw_visualizer.html (736 lines) - Modern UI
-  - web_interface.html (631 lines) - Classic UI
+tests/                               # Unit tests
+  ├── __init__.py
+  └── test_draw.py                   # 17 unit tests (257 lines)
 
-Tests:
-  - test_draw.py (257 lines) - 17 unit tests
+web/                                 # Web interfaces
+  ├── draw_visualizer.html           # Modern UI (736 lines)
+  └── web_interface.html             # Classic UI (631 lines)
 
-Docs:
-  - README.md - Main documentation
-  - ARCHITECTURE.md - Technical details
-  - CONTRIBUTING.md - How to contribute
-  - GITHUB_SETUP.md - Publishing guide
+docs/                                # Documentation
+  ├── ARCHITECTURE.md                # Technical details
+  ├── CONTRIBUTING.md                # How to contribute
+  ├── GITHUB_SETUP.md                # Publishing guide
+  └── QUICK_START.md                 # Quick reference
 
-DevOps:
-  - Dockerfile, docker-compose.yml
-  - .github/workflows/ci.yml - CI/CD
-  - Makefile - Build automation
+.github/workflows/                   # CI/CD
+  └── ci.yml                         # GitHub Actions
+
+Root files:
+  README.md, LICENSE, Dockerfile, Makefile, setup.py
 
 ALGORITHM
 ---------

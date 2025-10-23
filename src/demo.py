@@ -5,9 +5,9 @@ Complete demonstration script for the draw system
 
 import sys
 import time
-from champions_league_draw import ChampionsLeagueDraw, create_sample_teams
-from export_json import export_draw_to_json
-from statistics import DrawStatistics
+from .champions_league_draw import ChampionsLeagueDraw, create_sample_teams
+from .export_json import export_draw_to_json
+from .statistics import DrawStatistics
 
 
 def print_banner(text):

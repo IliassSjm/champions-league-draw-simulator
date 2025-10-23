@@ -3,7 +3,7 @@ Script to export draw results to JSON format
 """
 
 import json
-from champions_league_draw import ChampionsLeagueDraw, create_sample_teams
+from .champions_league_draw import ChampionsLeagueDraw, create_sample_teams
 
 
 def export_draw_to_json(draw: ChampionsLeagueDraw, filename: str = "draw_results.json"):

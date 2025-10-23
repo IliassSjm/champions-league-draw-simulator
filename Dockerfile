@@ -5,13 +5,9 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy application files
-COPY champions_league_draw.py .
-COPY statistics.py .
-COPY export_json.py .
-COPY demo.py .
-COPY test_draw.py .
-COPY draw_visualizer.html .
-COPY web_interface.html .
+COPY src/ ./src/
+COPY tests/ ./tests/
+COPY web/ ./web/
 COPY requirements.txt .
 
 # Create a non-root user
@@ -27,7 +23,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python3 -c "import sys; sys.exit(0)"
 
 # Default command
-CMD ["python3", "champions_league_draw.py"]
+CMD ["python3", "-m", "src.champions_league_draw"]
 
 # Labels
 LABEL maintainer="iliass.sjm@icloud.com"

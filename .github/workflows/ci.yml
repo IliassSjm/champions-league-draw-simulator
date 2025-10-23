@@ -26,16 +26,16 @@ jobs:
       run: python -c "import sys; print(sys.version)"
     
     - name: Run unit tests
-      run: python test_draw.py
+      run: python -m unittest discover -s tests
     
     - name: Test main draw execution
-      run: python champions_league_draw.py
+      run: python -m src.champions_league_draw
     
     - name: Test statistics module
-      run: python statistics.py
+      run: python -m src.statistics
     
     - name: Test export module
-      run: python export_json.py
+      run: python -m src.export_json
 
   docker:
     name: Build Docker Image
@@ -64,10 +64,10 @@ jobs:
         python-version: '3.11'
     
     - name: Check syntax
-      run: python -m py_compile *.py
+      run: python -m py_compile src/*.py tests/*.py
     
     - name: Check for common issues
       run: |
-        python -c "import ast; [ast.parse(open(f).read()) for f in ['champions_league_draw.py', 'test_draw.py', 'statistics.py', 'export_json.py', 'demo.py']]"
+        python -c "import ast, pathlib; [ast.parse(f.read_text()) for f in pathlib.Path('src').glob('*.py')]; [ast.parse(f.read_text()) for f in pathlib.Path('tests').glob('*.py')]"
         echo "All Python files have valid syntax"
 

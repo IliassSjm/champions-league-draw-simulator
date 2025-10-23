@@ -15,19 +15,19 @@ help:
 	@echo "  make dev-install  - Install in development mode"
 
 run:
-	python3 champions_league_draw.py
+	python3 -m src.champions_league_draw
 
 demo:
-	python3 demo.py
+	python3 -m src.demo
 
 test:
-	python3 test_draw.py
+	python3 -m pytest tests/ || python3 -m unittest discover -s tests
 
 stats:
-	python3 statistics.py
+	python3 -m src.statistics
 
 export:
-	python3 export_json.py
+	python3 -m src.export_json
 
 clean:
 	rm -f *.json
@@ -59,10 +59,10 @@ dev-install:
 	pip install -e .
 
 lint:
-	python -m py_compile *.py
+	python -m py_compile src/*.py tests/*.py
 
 check-syntax:
 	@echo "Checking Python syntax..."
-	@python -c "import ast; [ast.parse(open(f).read()) for f in ['champions_league_draw.py', 'test_draw.py', 'statistics.py', 'export_json.py', 'demo.py']]"
+	@python -c "import ast, pathlib; [ast.parse(f.read_text()) for f in pathlib.Path('src').glob('*.py') if f.name != '__init__.py']; [ast.parse(f.read_text()) for f in pathlib.Path('tests').glob('*.py') if f.name != '__init__.py']"
 	@echo "All files have valid syntax ✓"
 

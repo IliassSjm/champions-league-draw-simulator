@@ -15,7 +15,7 @@ This project implements the complex UEFA Champions League draw system with all o
 - **Data Visualization**: Multiple view modes for result analysis
 
 ### Live Demo
-[Open Interactive Visualizer](draw_visualizer.html) (Download and open in browser)
+[Open Interactive Visualizer](web/draw_visualizer.html) (Download and open in browser)
 
 ## Technical Highlights
 
@@ -36,13 +36,17 @@ This project implements the complex UEFA Champions League draw system with all o
 
 ```
 champions-league-draw/
-├── champions_league_draw.py  # Core algorithm implementation
-├── draw_visualizer.html       # Interactive web visualizer
-├── web_interface.html         # Alternative web interface
-├── statistics.py              # Statistical analysis module
-├── export_json.py             # JSON export functionality
-├── test_draw.py              # Unit test suite (17 tests)
-└── demo.py                   # Complete demonstration
+├── src/
+│   ├── champions_league_draw.py  # Core algorithm
+│   ├── statistics.py              # Statistical analysis
+│   ├── export_json.py             # JSON export
+│   └── demo.py                    # Demonstration
+├── tests/
+│   └── test_draw.py               # Unit tests (17 tests)
+├── web/
+│   ├── draw_visualizer.html       # Interactive visualizer
+│   └── web_interface.html         # Alternative interface
+└── docs/                          # Documentation
 ```
 
 ## Features
@@ -56,21 +60,21 @@ champions-league-draw/
 ### 2. Command-Line Interface
 ```bash
 # Run complete draw with verification
-python3 champions_league_draw.py
+python3 -m src.champions_league_draw
 
 # View detailed statistics
-python3 statistics.py
+python3 -m src.statistics
 
 # Export to JSON format
-python3 export_json.py
+python3 -m src.export_json
 
 # Run comprehensive demo
-python3 demo.py
+python3 -m src.demo
 ```
 
 ### 3. Programmatic API
 ```python
-from champions_league_draw import ChampionsLeagueDraw, create_sample_teams
+from src.champions_league_draw import ChampionsLeagueDraw, create_sample_teams
 
 teams = create_sample_teams()
 draw = ChampionsLeagueDraw(teams)
@@ -95,17 +99,17 @@ git clone https://github.com/iliassSjm/champions-league-draw.git
 cd champions-league-draw
 
 # Run the main program
-python3 champions_league_draw.py
+python3 -m src.champions_league_draw
 
 # Or open the web visualizer
-open draw_visualizer.html
+open web/draw_visualizer.html
 ```
 
 ### Running Tests
 
 ```bash
 # Execute test suite
-python3 test_draw.py
+python3 -m unittest discover -s tests
 
 # Expected output: 17 tests passed
 ```

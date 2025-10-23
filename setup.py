@@ -46,17 +46,13 @@ setup(
             "pytest-cov>=4.0.0",
         ],
     },
-    py_modules=[
-        "champions_league_draw",
-        "statistics",
-        "export_json",
-        "demo",
-    ],
+    packages=["src", "tests"],
+    package_dir={"src": "src", "tests": "tests"},
     entry_points={
         "console_scripts": [
-            "ucl-draw=champions_league_draw:main",
-            "ucl-stats=statistics:main",
-            "ucl-demo=demo:main",
+            "ucl-draw=src.champions_league_draw:main",
+            "ucl-stats=src.statistics:main",
+            "ucl-demo=src.demo:main",
         ],
     },
     include_package_data=True,
