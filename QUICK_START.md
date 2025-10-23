@@ -196,7 +196,7 @@ champions-league-draw/
 
 ## Requirements
 
-- **Python**: 3.7 or higher
+- **Python**: 3.8 or higher
 - **Browser**: Any modern browser for web interfaces
 - **Docker**: Optional, for containerization
 

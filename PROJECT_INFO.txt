@@ -50,7 +50,7 @@ Average time: 1-3 seconds
 
 TECH STACK
 ----------
-Python 3.7+ (stdlib only)
+Python 3.8+ (stdlib only)
 HTML5/CSS3/JavaScript
 Docker
 GitHub Actions

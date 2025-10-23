@@ -1,5 +1,5 @@
 # Aucune dépendance externe n'est requise
-# Le système utilise uniquement la bibliothèque standard Python 3.7+
+# Le système utilise uniquement la bibliothèque standard Python 3.8+
 
 # Pour le développement et les tests (optionnel)
 # pytest>=7.0.0
