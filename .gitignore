@@ -45,6 +45,11 @@ htmlcov/
 tirage_*.txt
 draw_results.*
 
+# Temporary summary files
+*_SUMMARY.txt
+UPDATE_*.txt
+REORGANIZATION_*.txt
+
 # Logs
 *.log
 
